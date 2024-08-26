@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <title>Frontend Mentor | Todo app</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="dark">
+    <div class="header">
+      <h1>Todo</h1>
+      <img src="images/icon-sun.svg" alt="">
+    </div>
+    <form class="todo-add-task">
+      <div class="todo__icon"></div>
+      <textarea required rows="1" id="" placeholder="Create a new todo..." class="todo__form-textarea"></textarea>
+    </form>
+  </header>
+
+  <main>
+    <ul class="todo__section-task-list">
+      <li>
+        <div class="todo__section-task-list__icon"></div>
+        <p class="todo__section-task-list__description"></p>
+        <button class="todo__section-task-list__remove"><img src="images/icon-cross.svg" alt="Icon of an 'X'"></button>
+      </li>
+    </ul>
+   <div class="todo__section-task-details">
+    <p class="todo__section-task-details__li">5 items left</p>
+    <button class="todo__section-task-details__li">Clear completed</button>
+   </div>
+
+    <ul class="todo__section-task-filters">
+      <li class="todo__section-task-filters__li">All</li>
+      <li class="todo__section-task-filters__li">Active</li>
+      <li class="todo__section-task-filters__li">Completed</li>
+    </ul>
+    <p class="main-drag-text">Drag and drop to reorder list</p>
+  </main>
+
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Your Name Here</a>.
+  </footer>
+</body>
+</html>
