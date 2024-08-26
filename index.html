@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" app-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,43 +7,50 @@
   <title>Frontend Mentor | Todo app</title>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-<body app-theme="dark">
+<body>
   <header>
     <div class="header">
       <h1>Todo</h1>
       <button id="button-theme"></button>
     </div>
-    <form class="todo-add-task">
+    <form class="todo-add-task todo-item">
       <div class="todo__icon"></div>
-      <textarea required rows="1" id="" placeholder="Create a new todo..." class="todo__form-textarea"></textarea>
+      <textarea required rows="1" id="" placeholder="Create a new todo..." class="todo__form-textarea primary-font"></textarea>
     </form>
   </header>
 
   <main>
-    <ul class="todo__section-task-list">
-      <li>
-        <div class="todo__section-task-list__icon"></div>
-        <p class="todo__section-task-list__description"></p>
-        <button class="todo__section-task-list__remove"><img src="images/icon-cross.svg" alt="Icon of an 'X'"></button>
-      </li>
-    </ul>
-   <div class="todo__section-task-details">
-    <p class="todo__section-task-details__li">5 items left</p>
-    <button class="todo__section-task-details__li">Clear completed</button>
-   </div>
+    <div class="todo-main">
+      <ul class="todo__section-task-list">
+        <li class="todo__section-task-list__li todo-item primary-font">
+          <div class="todo__icon"></div>
+          <p class="todo__section-task-list__description">Jog around</p>
+          <button class="todo__section-task-list__remove primary-font">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
+     <div class="todo__section-task-details todo-item secondary-font">
+      <p class="todo__section-task-details__li">5 items left</p>
+      <button class="todo__section-task-details__li secondary-font">Clear completed</button>
+     </div>
+    </div>
 
-    <ul class="todo__section-task-filters">
-      <li class="todo__section-task-filters__li">All</li>
-      <li class="todo__section-task-filters__li">Active</li>
-      <li class="todo__section-task-filters__li">Completed</li>
-    </ul>
-    <p class="main-drag-text">Drag and drop to reorder list</p>
+    <div class="todo__section-task-filters todo-item">
+      <button class="todo__section-task-filters__li secondary-font">All</button>
+      <button class="todo__section-task-filters__li secondary-font">Active</button>
+      <button class="todo__section-task-filters__li secondary-font">Completed</button>
+    </div>
+    <p class="main-drag-text secondary-font">Drag and drop to reorder list</p>
   </main>
 
   <footer class="attribution">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
+    Coded by <a href="https://github.com/nathaliaif">Nathalia Irokawa</a>.
   </footer>
 </body>
 </html>

@@ -30,7 +30,10 @@ body,
 html {
     width: 100%;
     max-width: 100%;
+    height: 100vh;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -57,21 +60,22 @@ header {
     height: 30px;
     width: 30px;
     border: none;
+    cursor: pointer;
 }
 
-.todo-add-task {
+.todo-item {
     display: flex;
     align-items: center;
     column-gap: 1rem;
     width: 100%;
     height: 3.5rem;
     padding: 1rem 1.5rem;
-    border-radius: 7px;
+    border-radius: 7px;  
 }
 
 .todo__icon {
     height: 25px;
-    width: 25px;
+    width: 33px;
     border-radius: 50%;
 }
 
@@ -93,7 +97,123 @@ header {
     }
 }
 
+/* ---- Main To-do List ---- */
+main {
+    padding: 0 2rem;
+    height: 100%;
+}
+
+.todo-main {
+    background-color: hsl(0, 0%, 98%);
+    border-radius: 7px;  
+}
+
+.todo__section-task-list {
+    margin-top: -2rem;
+}
+
+.todo-main .todo-item {
+    border-radius: 0;
+    background: none;
+}
+
+.todo__section-task-list__li {
+    justify-content: space-between;
+}
+
+.todo__section-task-list__description {
+    width: 100%;
+    font-weight: 400;
+}
+
+.todo__section-task-list__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.todo__section-task-details {
+    justify-content: space-between;
+    font-size: 1rem;
+}
+
+.todo__section-task-details button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.todo__section-task-filters {
+    margin-top: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.todo__section-task-filters__li {
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:active {
+        color: var(--bright-blue);
+    }
+}
+
+.main-drag-text {
+    margin-top: 4rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+
+/* ---- Footer ---- */
+.attribution {
+    float: bottom;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    padding: 1rem 1rem;
+    border-top: 1.5px solid var(--light-gray);
+    background-color: var(--white);
+    color: var(--dark-gray);
+    text-align: center;
+}
+
+.attribution a {
+    text-decoration: none;
+    color: var(--dark-violet);
+    transition: 0.3s;
+
+    &:hover {
+        color: #d05ab0;
+    }
+}
+
+
 [app-theme="dark"] {
+    .primary-font {
+        color: var(--light-gray-blue);
+    }
+
+    .secondary-font {
+        color: var(--very-dark-gray-blue);
+    }
+
+    body {
+        background-color: hsl(235, 21%, 11%);
+    }
+
     header {
         background: url('images/bg-mobile-dark.jpg');
         background-position: center;
@@ -106,7 +226,7 @@ header {
         background-size: cover;
     }
     
-    .todo-add-task {
+    header .todo-item, .todo__section-task-filters {
         background-color: var(--dark-blue-desaturated);
     }
 
@@ -114,17 +234,48 @@ header {
         border: 1px solid var(--very-dark-gray-blue);
     }
 
-    .todo__form-textarea {
-        color: var(--light-gray-blue);
-    }
-
     .todo__form-textarea::placeholder {
         color: var(--very-dark-gray-blue);
+    }
+
+    /* ---- Main To-do List ---- */
+    .todo-main {
+        background-color: var(--dark-blue-desaturated);
+    }  
+
+    .todo__section-task-list .todo-item {
+        border-bottom: 1px solid var(--very-dark-gray-blue);
+    }
+
+    /* ---- Footer ---- */
+    .attribution {
+        border-top: 1.5px solid var(--very-dark-gray-blue);
+        color: var(--very-dark-gray-blue);
+    }
+    
+    .attribution a {
+        color: var(--dark-gray-blue);
+    
+        &:hover {
+            color: var(--bright-blue);
+        }
     }
 
 }
 
 [app-theme="light"] {
+    .primary-font {
+        color: var(--very-dark-gray-blue);
+    }
+
+    .secondary-font {
+        color: var(--dark-gray-blue);
+    }
+
+    body {
+        background-color: var(--very-light-gray-blue);
+    }
+
     header {
         background: url('images/bg-mobile-light.jpg');
         background-position: center;
@@ -137,7 +288,7 @@ header {
         background-size: cover;
     }
     
-    .todo-add-task {
+    header .todo-item, .todo__section-task-filters  {
         background-color: hsl(0, 0%, 98%);
     }
 
@@ -152,5 +303,27 @@ header {
     .todo__form-textarea::placeholder {
         color: var(--dark-gray-blue);
     }
-}
 
+    /* ---- Main To-do List ---- */
+    .todo-main {
+        background-color: hsl(0, 0%, 98%);
+    }  
+
+    .todo__section-task-list .todo-item {
+        border-bottom: 1px solid var(--light-grayish-blue);
+        color: var(--very-dark-gray-blue);
+    }
+
+    /* ---- Footer ---- */
+    .attribution {
+        border-top: 1.5px solid var(--light-gray-blue);
+    }
+    
+    .attribution a {
+        color: var(--very-dark-gray-blue);
+    
+        &:hover {
+            color: var(--bright-blue);
+        }
+    }
+}
