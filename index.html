@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+  <script src="script-crud.js" defer></script>
 </head>
 <body>
   <header>
@@ -17,14 +18,14 @@
     </div>
     <form class="todo-add-task todo-item">
       <div class="todo__icon"></div>
-      <textarea required rows="1" id="" placeholder="Create a new todo..." class="todo__form-textarea primary-font"></textarea>
+      <textarea required rows="1" id="todo-textarea" placeholder="Create a new todo..." class="todo__form-textarea primary-font"></textarea>
     </form>
   </header>
 
   <main>
     <div class="todo-main">
       <ul class="todo__section-task-list">
-        <li class="todo__section-task-list__li todo-item primary-font">
+        <!-- <li class="todo__section-task-list__li todo-item primary-font">
           <div class="todo__icon"></div>
           <p class="todo__section-task-list__description">Jog around</p>
           <button class="todo__section-task-list__remove primary-font">
@@ -32,10 +33,10 @@
               <path fill="currentColor" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/>
             </svg>
           </button>
-        </li>
+        </li> -->
       </ul>
      <div class="todo__section-task-details todo-item secondary-font">
-      <p class="todo__section-task-details__li">5 items left</p>
+      <p class="todo__section-task-details__li"><span id="items-left"></span> items left</p>
       <button class="todo__section-task-details__li secondary-font">Clear completed</button>
      </div>
     </div>
