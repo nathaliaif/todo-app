@@ -1,6 +1,6 @@
 :root {
     --bright-blue: hsl(220, 98%, 61%);
-    --gradient: linear-gradient hsl(192, 100%, 67%) to hsl(280, 87%, 65%);
+    --gradient: linear-gradient(to right, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
 
     // Light Theme
     --light-gray: hsl(0, 0%, 98%);
@@ -40,7 +40,7 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    row-gap: 3rem;
+    row-gap: 25%;
     height: 18rem;
     padding: 2rem;
     color: #fff;
@@ -48,6 +48,7 @@ header {
 
 .header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -73,10 +74,43 @@ header {
     border-radius: 7px;  
 }
 
+.complete {
+    .todo__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gradient);
+
+        img {
+            display: block;
+            width: 50%;
+        }
+    }
+
+
+    .todo__section-task-list__description {
+        text-decoration: line-through;
+        color: var(--very-dark-gray-blue);
+    }
+}
+
 .todo__icon {
     height: 25px;
     width: 33px;
     border-radius: 50%;
+    border: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.todo__complete-task {
+    background: none;
+
+    img {
+        display: none;
+    }
 }
 
 .todo__form-textarea {
@@ -151,6 +185,10 @@ main {
     border: none;
     font-size: 1rem;
     cursor: pointer;
+
+    &:hover {
+        color: var(--bright-blue);
+    }
 }
 
 .todo__section-task-filters {
@@ -324,6 +362,67 @@ main {
     
         &:hover {
             color: var(--bright-blue);
+        }
+    }
+}
+
+@media screen and (min-width: 700px){
+    header {
+        padding: 0;
+        row-gap: 2.5rem;
+        height: 22rem;
+    }
+
+    .header {
+        width: 70%;
+        max-width: 45rem;
+        margin: 0 auto;
+    }
+
+    .header h1 {
+
+    }
+    
+    .todo-add-task {
+        width: 70%;
+        max-width: 45rem;
+        margin: 0 auto;
+    }
+
+    .todo-add-task .todo__icon {
+        width: 27px;
+    }
+
+    .todo-item {
+        height: 4rem;
+    }
+
+    .todo__icon {
+        height: 25px;
+        width: 28px;
+    }
+    
+    main {
+        width: 70%;
+        max-width: 45rem;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+
+    [app-theme="dark"]{  
+        header {
+            background: url('images/bg-desktop-dark.jpg');
+            background-position: center;
+            background-size: cover;
+    }
+    }
+
+    [app-theme="light"]{
+        header {
+            background: url('images/bg-desktop-light.jpg');
+            background-position: center;
+            background-size: cover;
         }
     }
 }

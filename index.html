@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" app-theme="light">
+<html lang="en" app-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
     </div>
     <form class="todo-add-task todo-item">
       <div class="todo__icon"></div>
-      <textarea required rows="1" id="todo-textarea" placeholder="Create a new todo..." class="todo__form-textarea primary-font"></textarea>
+      <textarea required rows="1" id="todo-textarea" maxlength="" placeholder="Create a new todo..." class="todo__form-textarea primary-font"></textarea>
     </form>
   </header>
 
@@ -26,7 +26,7 @@
     <div class="todo-main">
       <ul class="todo__section-task-list">
         <!-- <li class="todo__section-task-list__li todo-item primary-font">
-          <div class="todo__icon"></div>
+          <button class="todo__icon todo__complete-task"><img src="images/icon-check.svg" alt="" class="todo__completed-icon"></button>
           <p class="todo__section-task-list__description">Jog around</p>
           <button class="todo__section-task-list__remove primary-font">
             <svg xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,7 @@
       </ul>
      <div class="todo__section-task-details todo-item secondary-font">
       <p class="todo__section-task-details__li"><span id="items-left"></span> items left</p>
-      <button class="todo__section-task-details__li secondary-font">Clear completed</button>
+      <button class="todo__section-task-details__li secondary-font" id="clear-completed">Clear completed</button>
      </div>
     </div>
 
