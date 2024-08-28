@@ -4,9 +4,6 @@ const textItemsLeft = document.getElementById('items-left');
 
 const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
-// const btnFilterAll = document.getElementById('filter-all');
-// const btnFilterActive = document.getElementById('filter-active');
-// const btnFilterCompleted = document.getElementById('filter-completed');
 const btnClearCompleted = document.getElementById('clear-completed');
 
 // TODO: Clear completed
@@ -93,7 +90,7 @@ function createNewTask(task) {
     return li;
 }
 
-// Automatically ataches the eventListener to all present and future tasks
+// Automatically attaches the eventListener to all present and future tasks
 document.querySelector('.todo__section-task-list').addEventListener('click', function(event){
     const parentLi = event.target.closest('.todo__section-task-list__li');
     const buttonCheck = event.target.closest('.todo__complete-task');
@@ -121,14 +118,9 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
     updateItemsLeft();
 })
 
-
-// If tasks already exist from previous sessions
-// tasksList.forEach(task => {
-//     const taskElement = createNewTask(task);
-//     ulTasks.append(taskElement);
-// })
-
 // ---- Filters ----
+
+// Update the 'items left' counter
 function updateItemsLeft(){
     textItemsLeft.textContent = tasksList.filter(item => !item.complete).length;
 }
@@ -137,6 +129,7 @@ updateItemsLeft();
 
 const filters = document.querySelectorAll('input[type=radio]')
 
+// Will check which filter radio button was selected 
 filters.forEach(element => element.addEventListener("click", (e) => {
     createTaskListElement(filterTaskList(e.target.value));
 }))
@@ -160,3 +153,19 @@ function filterTaskList(filter) {
 
     return filteredTasks
 }
+
+// Clear completed tasks
+btnClearCompleted.addEventListener('click', () => {
+    tasksList.forEach(element => {
+        const elementId = element.id.toString();
+        const taskDOM = document.querySelector(`[unique-id="${elementId}"]`);
+        const isElementCompleted = element.complete;
+
+        if (isElementCompleted){
+            taskDOM.remove();
+            tasksList = tasksList.filter(item => item.id !== elementId);
+        } else {
+            return;
+        }
+    })
+})
