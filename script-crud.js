@@ -1,9 +1,12 @@
 const textareaAdd = document.getElementById('todo-textarea');
-const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const ulTasks = document.querySelector('.todo__section-task-list');
 const textItemsLeft = document.getElementById('items-left');
-const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
 
+const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
+const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
+const btnFilterAll = document.getElementById('filter-all');
+const btnFilterActive = document.getElementById('filter-active');
+const btnFilterCompleted = document.getElementById('filter-completed');
 
 // let tasksList = JSON.parse(localStorage.getItem('tasks')) || [];
 let tasksList = [];
@@ -14,8 +17,9 @@ textareaAdd.addEventListener('keydown', (event) => {
 
         const todoNewTask = textareaAdd.value;
         const task = {
-            id: Date.now(),
-            description: todoNewTask
+            id: Date.now().toString(),
+            description: todoNewTask,
+            complete: false
         }
 
         tasksList.push(task)
@@ -59,6 +63,7 @@ function createNewTask(task) {
     li.append(p);
     li.append(button);
 
+    updateItemsLeft();
     return li;
 }
 
@@ -67,22 +72,27 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
     const parentLi = event.target.closest('.todo__section-task-list__li');
     const buttonCheck = event.target.closest('.todo__complete-task');
     const buttonRemove = event.target.closest('.todo__section-task-list__remove');
+    const taskId = parentLi.getAttribute('unique-id');
+    const listItem = tasksList.find(item => item.id === taskId);
     
-    // Check if the click originated from an element that is or contains '.todo__complete-task' button
+    // Check if the click originated from a check button
     if (buttonCheck){
         if (parentLi.classList.contains('complete')){
             parentLi.classList.remove('complete');
+            listItem.complete = false;
+            
         } else {
             parentLi.classList.add('complete');
+            listItem.complete = true;
         }
     }
 
+    // Check if the click originated from a remove button
     if (buttonRemove){
-        const taskId = parentLi.getAttribute('unique-id');
-        
         parentLi.remove();
-        tasksList = tasksList.filter(task => task.id !== Number(taskId));
+        tasksList = tasksList.filter(task => task.id !== taskId);
     }
+    updateItemsLeft();
 })
 
 
@@ -91,3 +101,12 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
 //     const taskElement = createNewTask(task);
 //     ulTasks.append(taskElement);
 // })
+
+// ---- Filters ----
+function updateItemsLeft(){
+    textItemsLeft.textContent = tasksList.filter(item => !item.complete).length;
+}
+
+
+
+updateItemsLeft();
