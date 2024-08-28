@@ -202,10 +202,14 @@ main {
     background: none;
     font-size: 1.2rem;
     cursor: pointer;
+}
 
-    &:active {
-        color: var(--bright-blue);
-    }
+input[type="radio"]{
+    display: none;
+}
+
+.todo__section-task-filters div input[type="radio"]:checked+label{
+    color: var(--bright-blue);
 }
 
 .main-drag-text {

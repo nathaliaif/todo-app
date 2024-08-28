@@ -4,9 +4,12 @@ const textItemsLeft = document.getElementById('items-left');
 
 const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
-const btnFilterAll = document.getElementById('filter-all');
-const btnFilterActive = document.getElementById('filter-active');
-const btnFilterCompleted = document.getElementById('filter-completed');
+// const btnFilterAll = document.getElementById('filter-all');
+// const btnFilterActive = document.getElementById('filter-active');
+// const btnFilterCompleted = document.getElementById('filter-completed');
+const btnClearCompleted = document.getElementById('clear-completed');
+
+// TODO: Clear completed
 
 // let tasksList = JSON.parse(localStorage.getItem('tasks')) || [];
 let tasksList = [];
@@ -14,28 +17,49 @@ let tasksList = [];
 textareaAdd.addEventListener('keydown', (event) => {
     if (event.key === 'Enter'){
         event.preventDefault();
-
+        
         const todoNewTask = textareaAdd.value;
         const task = {
             id: Date.now().toString(),
             description: todoNewTask,
             complete: false
         }
-
-        tasksList.push(task)
+        
+        tasksList.push(task);
         // localStorage.setItem('tasksList', JSON.stringify(task))
         // console.log(tasksList)
         textareaAdd.value = '';
-
-        ulTasks.append(createNewTask(task));
+        
+        // ulTasks.append(createNewTask(task));
+        createTaskListElement(tasksList);
+        // TODO: not allow empty space
+        // TODO: Update localstorage
+        // TODO: Set filter as All
     }
 })
+
+function createTaskListElement(tasks) {
+    // if (!tasks.length) return;
+
+    console.log("createTaskListElement", { tasks });
+
+    const oldTasks = document.querySelectorAll('.todo__section-task-list__li');
+    oldTasks.forEach(item => item.remove());
+
+    tasks.forEach(item => {
+        ulTasks.append(createNewTask(item));
+    })
+}
 
 // ---- Create new task ----
 function createNewTask(task) {
     const li = document.createElement('li');
     li.classList.add('todo__section-task-list__li', 'todo-item', 'primary-font');
     li.setAttribute('unique-id', `${task.id}`);
+
+    if (task.complete){
+        li.classList.add('complete');
+    }
 
     const buttonComplete = document.createElement('button');
     buttonComplete.classList.add('todo__complete-task', 'todo__icon');
@@ -107,6 +131,49 @@ function updateItemsLeft(){
     textItemsLeft.textContent = tasksList.filter(item => !item.complete).length;
 }
 
-
-
 updateItemsLeft();
+
+const filters = document.querySelectorAll('input[type=radio]')
+
+filters.forEach(element => element.addEventListener("click", (e) => {
+    createTaskListElement(filterTaskList(e.target.value));
+}))
+
+// btnFilterAll.addEventListener('click', () => {
+//     createTaskListElement(filterTaskList('all'));
+//     btnFilterAll.focus();
+// })
+
+// btnFilterActive.addEventListener('click', () => {
+//     createTaskListElement(filterTaskList('active'));  
+// })
+
+// btnFilterCompleted.addEventListener('click', () => {
+//     createTaskListElement(filterTaskList('completed'))
+//     btnFilterCompleted.focus();
+// })
+
+function filterTaskList(filter) {
+    let filteredTasks = null;
+    
+    switch(filter){
+        case 'all':
+            filteredTasks = tasksList;
+            break;
+        case 'active':
+            filteredTasks = tasksList.filter(task => !task.complete);
+            break;
+        case 'completed':
+            filteredTasks = tasksList.filter(task => task.complete);
+            break;
+        default:
+            break;
+    }
+
+    return filteredTasks
+
+    // filteredTasks.forEach(task => {
+    //     const taskElement = createNewTask(task);
+    //     ulTasks.append(taskElement);
+    // })
+}

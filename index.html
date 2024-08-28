@@ -42,9 +42,21 @@
     </div>
 
     <div class="todo__section-task-filters todo-item">
-      <button class="todo__section-task-filters__li secondary-font" id="filter-all">All</button>
+      <!-- <button class="todo__section-task-filters__li secondary-font" id="filter-all">All</button>
       <button class="todo__section-task-filters__li secondary-font" id="filter-active">Active</button>
-      <button class="todo__section-task-filters__li secondary-font" id="filter-completed">Completed</button>
+      <button class="todo__section-task-filters__li secondary-font" id="filter-completed">Completed</button> -->
+      <div>
+        <input name="filters" type="radio" id="filter-all" value="all" checked></input>
+        <label class="todo__section-task-filters__li secondary-font" for="filter-all">All</label>
+      </div>
+      <div>
+        <input name="filters" type="radio" id="filter-active" value="active"></input>
+        <label class="todo__section-task-filters__li secondary-font" for="filter-active">Active</label>
+      </div>
+      <div>
+        <input name="filters" type="radio" id="filter-completed" value="completed"></input>
+        <label class="todo__section-task-filters__li secondary-font" for="filter-completed">Completed</label>
+      </div>
     </div>
     <p class="main-drag-text secondary-font">Drag and drop to reorder list</p>
   </main>
