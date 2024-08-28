@@ -17,32 +17,34 @@ let tasksList = [];
 textareaAdd.addEventListener('keydown', (event) => {
     if (event.key === 'Enter'){
         event.preventDefault();
+        const todoNewTask = textareaAdd.value.trim();
         
-        const todoNewTask = textareaAdd.value;
-        const task = {
-            id: Date.now().toString(),
-            description: todoNewTask,
-            complete: false
+        if (todoNewTask.length !== 0){
+            const task = {
+                id: Date.now().toString(),
+                description: todoNewTask,
+                complete: false
+            }
+            
+            tasksList.push(task);
+            // localStorage.setItem('tasksList', JSON.stringify(task))
+            // console.log(tasksList)
+            textareaAdd.value = '';
+            
+            // ulTasks.append(createNewTask(task));
+            createTaskListElement(tasksList);
+            // TODO: not allow empty space
+            // TODO: Update localstorage
+            // TODO: Set filter as All
+        } else {
+            return;
         }
-        
-        tasksList.push(task);
-        // localStorage.setItem('tasksList', JSON.stringify(task))
-        // console.log(tasksList)
-        textareaAdd.value = '';
-        
-        // ulTasks.append(createNewTask(task));
-        createTaskListElement(tasksList);
-        // TODO: not allow empty space
-        // TODO: Update localstorage
-        // TODO: Set filter as All
     }
 })
 
 function createTaskListElement(tasks) {
     // if (!tasks.length) return;
-
-    console.log("createTaskListElement", { tasks });
-
+    // console.log("createTaskListElement", { tasks });
     const oldTasks = document.querySelectorAll('.todo__section-task-list__li');
     oldTasks.forEach(item => item.remove());
 
@@ -139,20 +141,6 @@ filters.forEach(element => element.addEventListener("click", (e) => {
     createTaskListElement(filterTaskList(e.target.value));
 }))
 
-// btnFilterAll.addEventListener('click', () => {
-//     createTaskListElement(filterTaskList('all'));
-//     btnFilterAll.focus();
-// })
-
-// btnFilterActive.addEventListener('click', () => {
-//     createTaskListElement(filterTaskList('active'));  
-// })
-
-// btnFilterCompleted.addEventListener('click', () => {
-//     createTaskListElement(filterTaskList('completed'))
-//     btnFilterCompleted.focus();
-// })
-
 function filterTaskList(filter) {
     let filteredTasks = null;
     
@@ -171,9 +159,4 @@ function filterTaskList(filter) {
     }
 
     return filteredTasks
-
-    // filteredTasks.forEach(task => {
-    //     const taskElement = createNewTask(task);
-    //     ulTasks.append(taskElement);
-    // })
 }
