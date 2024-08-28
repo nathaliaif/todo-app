@@ -1,6 +1,7 @@
 const textareaAdd = document.getElementById('todo-textarea');
 const ulTasks = document.querySelector('.todo__section-task-list');
 const textItemsLeft = document.getElementById('items-left');
+const editableTaskValue = document.querySelectorAll('todo__section-task-list__description')
 
 const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
@@ -69,6 +70,7 @@ function createNewTask(task) {
     buttonComplete.append(buttonCheckImg);
 
     const p = document.createElement('p');
+    p.setAttribute('contenteditable', 'true');
     p.classList.add('todo__section-task-list__description');
     p.textContent = task.description;
 
@@ -90,15 +92,27 @@ function createNewTask(task) {
     return li;
 }
 
+// Avoid creation of new line break when pressed 'Enter' while editing task name
+// editableTaskValue.forEach(element => {
+//     element.addEventListener('keydown', function(event){
+//     if (event.key === 'Enter'){
+//         event.preventDefault();
+//         console.log('enter')
+//         this.blur();
+//     }
+// })})
+
+
 // Automatically attaches the eventListener to all present and future tasks
 document.querySelector('.todo__section-task-list').addEventListener('click', function(event){
     const parentLi = event.target.closest('.todo__section-task-list__li');
     const buttonCheck = event.target.closest('.todo__complete-task');
     const buttonRemove = event.target.closest('.todo__section-task-list__remove');
+    const editTaskName = event.target.closest('.todo__section-task-list__description');
     const taskId = parentLi.getAttribute('unique-id');
     const listItem = tasksList.find(item => item.id === taskId);
     
-    // Check if the click originated from a check button
+    // If it's the check complete button
     if (buttonCheck){
         if (parentLi.classList.contains('complete')){
             parentLi.classList.remove('complete');
@@ -110,11 +124,26 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
         }
     }
 
-    // Check if the click originated from a remove button
+    // If it's the remove button
     if (buttonRemove){
         parentLi.remove();
         tasksList = tasksList.filter(task => task.id !== taskId);
     }
+
+    // If the click is on the task name
+    if (editTaskName){
+        editTaskName.addEventListener('keydown', function(event){
+            if (event.key === 'Enter'){
+                event.preventDefault();
+                editTaskName.blur();
+                
+                // Updating the array
+                const newValue = editTaskName.textContent.trim();
+                listItem.description = newValue;
+            }
+        })
+    }
+
     updateItemsLeft();
 })
 
