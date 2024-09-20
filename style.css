@@ -29,20 +29,26 @@
 body,
 html {
     width: 100%;
-    max-width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }
 
+[draggable="true"] {
+    
+}
+
 header {
+    position: relative;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    row-gap: 25%;
-    height: 18rem;
-    padding: 2rem;
+    row-gap: 2rem;
+    min-height: 200px;
+    padding: 0 2rem;
     color: #fff;
 }
 
@@ -117,14 +123,13 @@ header {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100%;
     resize: none;
     padding: 0;
     overflow: hidden;
     background: transparent;
     border: none;
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 2rem;
 
     &:focus {
         outline: none;
@@ -133,16 +138,13 @@ header {
 
 /* ---- Main To-do List ---- */
 main {
-    padding: 0 2rem;
-    height: 100%;
+    position: relative;
+    padding: 0 2rem 4rem 2rem;
+    min-height: calc(100vh - 200px - 65px);
 }
 
 .todo-main {
-    background-color: hsl(0, 0%, 98%);
     border-radius: 7px;  
-}
-
-.todo__section-task-list {
     margin-top: -2rem;
 }
 
@@ -158,6 +160,13 @@ main {
 .todo__section-task-list__description {
     width: 100%;
     font-weight: 400;
+    padding: 0.2rem 0 0.2rem 0.2rem;
+
+    &:focus{
+        outline-style: none;
+        background-color: rgb(from var(--bright-blue) r g b / 10%);
+        /* border-bottom: 0.5px solid var(--bright-blue) */
+    }
 }
 
 .todo__section-task-list__remove {
@@ -378,7 +387,7 @@ input[type="radio"]:checked+label{
     header {
         padding: 0;
         row-gap: 2.5rem;
-        height: 22rem;
+        min-height: 17rem;
     }
 
     .header {
@@ -413,8 +422,10 @@ input[type="radio"]:checked+label{
     main {
         width: 70%;
         max-width: 45rem;
-        padding: 0;
+        padding: 0 0 3rem 0;
         margin: 0 auto;
+        min-height: calc(100vh - 272px - 49px);
+        height: auto;
     }
 
 

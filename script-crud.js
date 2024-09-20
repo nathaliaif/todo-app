@@ -1,7 +1,6 @@
 const textareaAdd = document.getElementById('todo-textarea');
 const ulTasks = document.querySelector('.todo__section-task-list');
 const textItemsLeft = document.getElementById('items-left');
-const editableTaskValue = document.querySelectorAll('todo__section-task-list__description')
 
 const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
@@ -49,13 +48,16 @@ function createTaskListElement(tasks) {
     tasks.forEach(item => {
         ulTasks.append(createNewTask(item));
     })
+
+    updateDragAndDrop();
 }
 
-// ---- Create new task ----
+// ---- Create new task item element ----
 function createNewTask(task) {
     const li = document.createElement('li');
     li.classList.add('todo__section-task-list__li', 'todo-item', 'primary-font');
     li.setAttribute('unique-id', `${task.id}`);
+    li.setAttribute('draggable', 'true');
 
     if (task.complete){
         li.classList.add('complete');
@@ -70,7 +72,7 @@ function createNewTask(task) {
     buttonComplete.append(buttonCheckImg);
 
     const p = document.createElement('p');
-    p.setAttribute('contenteditable', 'true');
+    // p.setAttribute('contenteditable', 'true');
     p.classList.add('todo__section-task-list__description');
     p.textContent = task.description;
 
@@ -92,16 +94,12 @@ function createNewTask(task) {
     return li;
 }
 
-// Avoid creation of new line break when pressed 'Enter' while editing task name
-// editableTaskValue.forEach(element => {
-//     element.addEventListener('keydown', function(event){
-//     if (event.key === 'Enter'){
-//         event.preventDefault();
-//         console.log('enter')
-//         this.blur();
-//     }
-// })})
-
+const BUTTON_CHECK = '.todo__complete-task'
+const ACTION_BUTTONS = {
+    CHECK: '.todo__complete-task',
+    EDIT: '.todo__section-task-list__description',
+    REMOVE: '.todo__section-task-list__remove'
+}
 
 // Automatically attaches the eventListener to all present and future tasks
 document.querySelector('.todo__section-task-list').addEventListener('click', function(event){
@@ -111,13 +109,13 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
     const editTaskName = event.target.closest('.todo__section-task-list__description');
     const taskId = parentLi.getAttribute('unique-id');
     const listItem = tasksList.find(item => item.id === taskId);
+
+    console.log("click", {event, parentLi, buttonCheck, buttonRemove, editTaskName})
     
-    // If it's the check complete button
     if (buttonCheck){
         if (parentLi.classList.contains('complete')){
             parentLi.classList.remove('complete');
             listItem.complete = false;
-            
         } else {
             parentLi.classList.add('complete');
             listItem.complete = true;
@@ -130,22 +128,35 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
         tasksList = tasksList.filter(task => task.id !== taskId);
     }
 
-    // If the click is on the task name
-    if (editTaskName){
-        editTaskName.addEventListener('keydown', function(event){
-            if (event.key === 'Enter'){
-                event.preventDefault();
-                editTaskName.blur();
-                
-                // Updating the array
-                const newValue = editTaskName.textContent.trim();
-                listItem.description = newValue;
-            }
-        })
+    function handleClickOutside(event){
+        if (event.target !== editTaskName){
+            console.log('oi')
+        }
     }
+    // If the click is on the task name
+    // if (editTaskName){
+    //     editTaskName.addEventListener('keydown', function(event){
+    //         if (event.key === 'Enter'){
+    //             event.preventDefault();
+    //             editTaskName.blur();
+                
+    //             const newValue = editTaskName.textContent.trim();
+    //             // Updating the array
+    //             if (newValue.length === 0){
+    //                 return;
+    //             } else {
+    //                 listItem.description = newValue;
+    //             }
+    //         }
+    //     })
+        // window.addEventListener('click', handleClickOutside)
 
+    // }
+
+    // window.removeEventListener('click', handleClickOutside);
     updateItemsLeft();
 })
+
 
 // ---- Filters ----
 
@@ -198,3 +209,76 @@ btnClearCompleted.addEventListener('click', () => {
         }
     })
 })
+
+
+// ---- Drag and Drop ----
+const container = document.querySelector('.todo__section-task-list');
+
+function updateDragAndDrop(){
+    const draggables = document.querySelectorAll('.todo__section-task-list__li');
+
+     draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging');
+        })
+    
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+        })
+    })
+}
+
+container.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(container, e.clientY);
+        const dragging = document.querySelector('.dragging');
+
+        const draggingUniqueId = dragging.getAttribute('unique-id');
+        const draggingIndex = tasksList.findIndex(item => item.id === draggingUniqueId);
+        const draggingObject = tasksList.find(item => item.id === draggingUniqueId);
+
+        let afterElementIndex = -1;
+        if (afterElement){
+            const afterElementUniqueId = afterElement.getAttribute('unique-id');
+            afterElementIndex = tasksList.findIndex(item => item.id === afterElementUniqueId);
+            container.insertBefore(dragging, afterElement);
+        } else {
+            container.appendChild(dragging);
+        }
+
+        //Reorder tasksList array
+        if (draggingIndex !== -1){
+            tasksList.splice(draggingIndex, 1);
+
+            const newIndex = afterElementIndex - 1;
+            tasksList.splice(newIndex, 0, draggingObject);
+            console.log(tasksList)
+        } else {
+            tasksList.push(draggingObject);
+            console.log(tasksList)
+        }
+
+})
+
+//Determine the order of our elements, based on where the mouse is
+function getDragAfterElement(container, y){
+
+// Gets every element that we're not currently dragging
+const draggableElements = [...container.querySelectorAll('[draggable="true"]:not(.dragging)')];
+
+return draggableElements.reduce((closest, child) => {
+
+    const box = child.getBoundingClientRect(); // Gets the rectangle of our box
+    const offset = y - box.top - box.height / 2; // distance between the center of the box and mouse
+    // When we're below an element, our numbers are positive
+    // Above the element, our numbers are negative
+    
+    // Checks which element our draggable element is above
+    if (offset < 0 && offset > closest.offset){
+        return { offset: offset, element: child };
+    } else {        
+        return closest;
+    }
+}, { offset: Number.NEGATIVE_INFINITY }).element;
+// Will return which element the mouse position is directly after
+}
