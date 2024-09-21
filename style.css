@@ -36,10 +36,6 @@ html {
     flex-direction: column;
 }
 
-[draggable="true"] {
-    
-}
-
 header {
     position: relative;
     width: 100%;
@@ -113,9 +109,11 @@ header {
 
 .todo__complete-task {
     background: none;
+    cursor: pointer;
 
     img {
         display: none;
+        cursor: pointer;
     }
 }
 
@@ -141,6 +139,10 @@ main {
     position: relative;
     padding: 0 2rem 4rem 2rem;
     min-height: calc(100vh - 200px - 65px);
+}
+
+.dragging {
+    cursor: grabbing;
 }
 
 .todo-main {

@@ -6,10 +6,20 @@ const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
 const btnClearCompleted = document.getElementById('clear-completed');
 
-// TODO: Clear completed
-
-// let tasksList = JSON.parse(localStorage.getItem('tasks')) || [];
 let tasksList = [];
+updateTasks(JSON.parse(localStorage.getItem('tasks')));
+
+function updateTasks(newTaskList){
+    if (!newTaskList){
+        return;
+    }
+
+    localStorage.setItem('tasks', JSON.stringify(newTaskList));
+    tasksList = newTaskList;
+
+    updateItemsLeft();
+    createTaskListElement(newTaskList);
+}
 
 textareaAdd.addEventListener('keydown', (event) => {
     if (event.key === 'Enter'){
@@ -23,14 +33,8 @@ textareaAdd.addEventListener('keydown', (event) => {
                 complete: false
             }
             
-            tasksList.push(task);
-            // localStorage.setItem('tasksList', JSON.stringify(task))
-            // console.log(tasksList)
             textareaAdd.value = '';
-            
-            // ulTasks.append(createNewTask(task));
-            createTaskListElement(tasksList);
-            // TODO: not allow empty space
+            updateTasks([...tasksList, task]);
             // TODO: Update localstorage
             // TODO: Set filter as All
         } else {
@@ -49,7 +53,6 @@ function createTaskListElement(tasks) {
         ulTasks.append(createNewTask(item));
     })
 
-    updateDragAndDrop();
 }
 
 // ---- Create new task item element ----
@@ -90,7 +93,37 @@ function createNewTask(task) {
     li.append(p);
     li.append(button);
 
-    updateItemsLeft();
+    li.addEventListener('dragstart', () => {
+        li.classList.add('dragging');
+    })
+    
+    li.addEventListener('dragend', () => {
+        li.classList.remove('dragging');
+        const cloneTaskList = [...tasksList];
+        
+        const draggingUniqueId = li.getAttribute('unique-id');
+        const draggingIndex = cloneTaskList.findIndex(item => item.id === draggingUniqueId);
+        const draggingObject = cloneTaskList.find(item => item.id === draggingUniqueId);
+        
+        let afterElementIndex = -1;
+        if (afterElement){
+            const afterElementUniqueId = afterElement.getAttribute('unique-id');
+            afterElementIndex = cloneTaskList.findIndex(item => item.id === afterElementUniqueId);
+        } else {
+            afterElementIndex = cloneTaskList.length;
+        }
+
+        //Reorder tasksList array
+        if (draggingIndex !== -1){
+            cloneTaskList.splice(draggingIndex, 1);
+
+            const newIndex = afterElementIndex;
+            cloneTaskList.splice(newIndex, 0, draggingObject);
+        } else {
+            cloneTaskList.push(draggingObject);
+        }
+        updateTasks(cloneTaskList);
+    })
     return li;
 }
 
@@ -108,7 +141,8 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
     const buttonRemove = event.target.closest('.todo__section-task-list__remove');
     const editTaskName = event.target.closest('.todo__section-task-list__description');
     const taskId = parentLi.getAttribute('unique-id');
-    const listItem = tasksList.find(item => item.id === taskId);
+    let cloneTaskList = [...tasksList];
+    const listItem = cloneTaskList.find(item => item.id === taskId);
 
     console.log("click", {event, parentLi, buttonCheck, buttonRemove, editTaskName})
     
@@ -116,16 +150,20 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
         if (parentLi.classList.contains('complete')){
             parentLi.classList.remove('complete');
             listItem.complete = false;
+
         } else {
             parentLi.classList.add('complete');
             listItem.complete = true;
         }
+        updateTasks(cloneTaskList);
+        console.log(tasksList);
     }
 
     // If it's the remove button
     if (buttonRemove){
         parentLi.remove();
-        tasksList = tasksList.filter(task => task.id !== taskId);
+
+        updateTasks(tasksList.filter(task => task.id !== taskId));
     }
 
     function handleClickOutside(event){
@@ -154,7 +192,6 @@ document.querySelector('.todo__section-task-list').addEventListener('click', fun
     // }
 
     // window.removeEventListener('click', handleClickOutside);
-    updateItemsLeft();
 })
 
 
@@ -165,7 +202,6 @@ function updateItemsLeft(){
     textItemsLeft.textContent = tasksList.filter(item => !item.complete).length;
 }
 
-updateItemsLeft();
 
 const filters = document.querySelectorAll('input[type=radio]')
 
@@ -203,7 +239,8 @@ btnClearCompleted.addEventListener('click', () => {
 
         if (isElementCompleted){
             taskDOM.remove();
-            tasksList = tasksList.filter(item => item.id !== elementId);
+
+            updateTasks(tasksList.filter(item => item.id !== elementId));
         } else {
             return;
         }
@@ -213,51 +250,18 @@ btnClearCompleted.addEventListener('click', () => {
 
 // ---- Drag and Drop ----
 const container = document.querySelector('.todo__section-task-list');
-
-function updateDragAndDrop(){
-    const draggables = document.querySelectorAll('.todo__section-task-list__li');
-
-     draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', () => {
-            draggable.classList.add('dragging');
-        })
-    
-        draggable.addEventListener('dragend', () => {
-            draggable.classList.remove('dragging');
-        })
-    })
-}
+let afterElement;
 
 container.addEventListener('dragover', e => {
         e.preventDefault();
-        const afterElement = getDragAfterElement(container, e.clientY);
-        const dragging = document.querySelector('.dragging');
+        afterElement = getDragAfterElement(container, e.clientY);
+        const draggable = document.querySelector('.dragging');
 
-        const draggingUniqueId = dragging.getAttribute('unique-id');
-        const draggingIndex = tasksList.findIndex(item => item.id === draggingUniqueId);
-        const draggingObject = tasksList.find(item => item.id === draggingUniqueId);
-
-        let afterElementIndex = -1;
-        if (afterElement){
-            const afterElementUniqueId = afterElement.getAttribute('unique-id');
-            afterElementIndex = tasksList.findIndex(item => item.id === afterElementUniqueId);
-            container.insertBefore(dragging, afterElement);
+        if (!afterElement){ 
+            container.appendChild(draggable);
         } else {
-            container.appendChild(dragging);
+            container.insertBefore(draggable, afterElement);
         }
-
-        //Reorder tasksList array
-        if (draggingIndex !== -1){
-            tasksList.splice(draggingIndex, 1);
-
-            const newIndex = afterElementIndex - 1;
-            tasksList.splice(newIndex, 0, draggingObject);
-            console.log(tasksList)
-        } else {
-            tasksList.push(draggingObject);
-            console.log(tasksList)
-        }
-
 })
 
 //Determine the order of our elements, based on where the mouse is
