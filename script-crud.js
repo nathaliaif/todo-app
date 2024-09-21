@@ -6,6 +6,8 @@ const btnRemoveTask = document.querySelector('todo__section-task-list__remove');
 const btnCompleteTask = document.querySelectorAll('.todo__complete-task');
 const btnClearCompleted = document.getElementById('clear-completed');
 
+const filters = document.querySelectorAll('input[type=radio]')
+
 let tasksList = [];
 updateTasks(JSON.parse(localStorage.getItem('tasks')));
 
@@ -36,7 +38,6 @@ textareaAdd.addEventListener('keydown', (event) => {
             textareaAdd.value = '';
             updateTasks([...tasksList, task]);
             // TODO: Update localstorage
-            // TODO: Set filter as All
         } else {
             return;
         }
@@ -55,7 +56,7 @@ function createTaskListElement(tasks) {
 
 }
 
-// ---- Create new task item element ----
+// ---- Create new individual task item element ----
 function createNewTask(task) {
     const li = document.createElement('li');
     li.classList.add('todo__section-task-list__li', 'todo-item', 'primary-font');
@@ -202,8 +203,6 @@ function updateItemsLeft(){
     textItemsLeft.textContent = tasksList.filter(item => !item.complete).length;
 }
 
-
-const filters = document.querySelectorAll('input[type=radio]')
 
 // Will check which filter radio button was selected 
 filters.forEach(element => element.addEventListener("click", (e) => {
